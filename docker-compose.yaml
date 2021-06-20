@@ -1,0 +1,48 @@
+version: '3'
+services:
+
+  postgres:
+    image: postgres:12.5
+    restart: always
+    hostname: postgres
+    environment:
+      - POSTGRES_DB=postgres_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+    ports:
+      - 5432:5432
+
+  subscribe:
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: "./examples/subscribe.py"
+    stdin_open: true
+    tty: true
+    environment:
+      - PYTHONPATH=.
+      - HOST=postgres
+      - PORT=5432
+      - DBNAME=postgres_db
+      - USER=user
+      - PASSWORD=pass
+
+  publish:
+    depends_on:
+      - postgres
+      - subscribe
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: "./examples/publish.py"
+    stdin_open: true
+    tty: true
+    environment:
+      - PYTHONPATH=.
+      - HOST=postgres
+      - PORT=5432
+      - DBNAME=postgres_db
+      - USER=user
+      - PASSWORD=pass
