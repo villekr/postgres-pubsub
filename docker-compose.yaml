@@ -5,6 +5,7 @@ services:
     image: postgres:12.5
     restart: always
     hostname: postgres
+    container_name: postgres
     environment:
       - POSTGRES_DB=postgres_db
       - POSTGRES_USER=user
@@ -18,7 +19,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: "./examples/subscribe.py"
+    entrypoint: ["wait-for-it", "--service", "postgres:5432", "--timeout=20", "--", "python", "./examples/subscribe.py"]
     stdin_open: true
     tty: true
     environment:
@@ -36,7 +37,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: "./examples/publish.py"
+    entrypoint: ["wait-for-it", "--service", "postgres:5432", "--timeout=20", "--", "python", "./examples/publish.py"]
     stdin_open: true
     tty: true
     environment:

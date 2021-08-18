@@ -1,0 +1,6 @@
+PYTHONPATH=.
+HOST=localhost
+PORT=5432
+DBNAME=postgres_db
+USER=user
+PASSWORD=pass
