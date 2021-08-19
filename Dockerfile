@@ -4,4 +4,5 @@ WORKDIR /postgres-pubsub
 COPY . .
 RUN pip install psycopg2-binary=="2.9.1" wait-for-it=="2.2.0"
 
+ENV PYTHONUNBUFFERED=1
 ENTRYPOINT ["python"]
